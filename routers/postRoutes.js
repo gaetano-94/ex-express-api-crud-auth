@@ -7,13 +7,23 @@ const {
   deletePost,
 } = require('../controllers/postController');
 const { postValidationRules } = require('../validations/postValidation');
+const authenticateToken = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
-router.post('/posts', postValidationRules, createPost);
+// Rotta per creare un post
+router.post('/posts', authenticateToken, postValidationRules, createPost);
+
+// Rotta per recuperare un post tramite slug
 router.get('/posts/:slug', getPostBySlug);
+
+// Rotta per recuperare tutti i post
 router.get('/posts', getAllPosts);
-router.put('/posts/:slug', postValidationRules, updatePost);
-router.delete('/posts/:slug', deletePost);
+
+// Rotta per aggiornare un post tramite slug
+router.put('/posts/:slug', authenticateToken, postValidationRules, updatePost);
+
+// Rotta per eliminare un post tramite slug
+router.delete('/posts/:slug', authenticateToken, deletePost);
 
 module.exports = router;
